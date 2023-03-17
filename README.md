@@ -1,6 +1,6 @@
 # How to use the `ApiController` class
 
-`ApiController` is a wrapper class for handling all integrations using the `HttpRequest` and `HttpResponse` classes in Apex. This simple guide explains how to use the class in your Apex code.
+`ApiController` is a Controller for handling all integrations using the `HttpRequest` and `HttpResponse` classes in Apex. This simple guide explains how to use the class in your Apex code.
 
 ## Prerequisites
 
@@ -13,8 +13,6 @@ Before using the `ApiController`, you need to ensure that:
 You can use the quick installer here to deploy directly to your org.
 
 [![Deploy to salesforce](https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/deploy.png)](https://githubsfdeploy.herokuapp.com/?owner=Stretch-Engage&repo=ApiController)
-
-After install assign the permission set `View and manage Gantt Chart` to relevant users.
 
 ## Usage
 

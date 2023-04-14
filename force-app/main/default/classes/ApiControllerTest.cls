@@ -2,7 +2,7 @@
  * @description       : Test class for ApiController
  * @author            : Erlend.Hansen@stretch.no | https://trailblazer.me/id/ehansen7
  * @group             : SharedCode, Test
- * @last modified on  : 03-17-2023
+ * @last modified on  : 04-14-2023
  * @last modified by  : Erlend.Hansen@stretch.no | https://trailblazer.me/id/ehansen7
  **/
 @isTest
@@ -11,8 +11,16 @@ private class ApiControllerTest {
   static void testInit() {
     ApiController ctrl = new ApiController()
       .init('My_Named_Credential', ApiController.HttpVerb.DEL, '/some/path');
-    System.assertEquals('callout:My_Named_Credential', ctrl.endpoint);
-    System.assertEquals('/some/path', ctrl.path);
+    Assert.areEqual(
+      'callout:My_Named_Credential',
+      ctrl.endpoint,
+      'The Named Credential did not match the provided endpoint'
+    );
+    Assert.areEqual(
+      '/some/path',
+      ctrl.path,
+      'The path did not match the test path'
+    );
   }
 
   @isTest
@@ -24,13 +32,15 @@ private class ApiControllerTest {
       'Content-Type' => 'application/json'
     };
     ctrl.addHeaders(headers);
-    System.assertEquals(
+    Assert.areEqual(
       'Bearer token',
-      ctrl.request.getHeader('Authorization')
+      ctrl.request.getHeader('Authorization'),
+      'The Authorization header did not match the provided token value'
     );
-    System.assertEquals(
+    Assert.areEqual(
       'application/json',
-      ctrl.request.getHeader('Content-Type')
+      ctrl.request.getHeader('Content-Type'),
+      'The Content-Type header did not match the provided data type'
     );
   }
 
@@ -43,9 +53,10 @@ private class ApiControllerTest {
     };
     ctrl.addQueryParameter(queryParameters);
     ctrl.doCallout();
-    System.assertEquals(
+    Assert.areEqual(
       '/some/path?param1=valueStored',
-      ctrl.request.getEndpoint()
+      ctrl.request.getEndpoint(),
+      'The query parameter did not match the provided values at the end of the path.'
     );
   }
 
@@ -54,7 +65,7 @@ private class ApiControllerTest {
     ApiController ctrl = new ApiController()
       .init('My_Named_Credential', ApiController.HttpVerb.POST, '/some/path');
     ctrl.addBody('{"foo":"bar"}');
-    System.assertEquals('{"foo":"bar"}', ctrl.request.getBody());
+    Assert.areEqual('{"foo":"bar"}', ctrl.request.getBody());
   }
 
   @isTest
@@ -65,8 +76,16 @@ private class ApiControllerTest {
     Test.startTest();
     ctrl.doCallout();
     Test.stopTest();
-    System.assertEquals(200, ctrl.response.getStatusCode());
-    System.assertEquals('{"foo":"bar"}', ctrl.response.getBody());
+    Assert.areEqual(
+      200,
+      ctrl.response.getStatusCode(),
+      'Status code should be 200 for a successful GET request.'
+    );
+    Assert.areEqual(
+      '{"foo":"bar"}',
+      ctrl.response.getBody(),
+      'The response body should be {"foo":"bar"}'
+    );
   }
 
   private class MockHttpResponseGenerator implements HttpCalloutMock {
@@ -93,9 +112,10 @@ private class ApiControllerTest {
       System.assert(false, 'Expected an exception to be thrown, but none was.');
     } catch (ApiController.ApiControllerException e) {
       // We expect an exception to be thrown, so we assert that it's the correct type
-      System.assertEquals(
+      Assert.areEqual(
         'Error occurred while calling external API: TEST EXCEPTION',
-        e.getMessage()
+        e.getMessage(),
+        'The exception message should be "Error occurred while calling external API: TEST EXCEPTION"'
       );
     }
     Test.stopTest();
@@ -117,8 +137,9 @@ private class ApiControllerTest {
       new ApiController().init(null, null, null);
       System.assert(false, 'Exception should have been thrown.');
     } catch (ApiController.ApiControllerException ex) {
-      System.assert(
-        ex.getMessage().contains('Invalid input parameters on method "init"')
+      Assert.isTrue(
+        ex.getMessage().contains('Invalid input parameters on method "init"'),
+        'Exception message should contain "Invalid input parameters on method "init"'
       );
     }
   }
@@ -134,11 +155,12 @@ private class ApiControllerTest {
         );
       System.assert(false, 'Exception should have been thrown.');
     } catch (ApiController.ApiControllerException ex) {
-      System.assert(
+      Assert.isTrue(
         ex.getMessage()
           .contains(
             'Path should not contain query parameters. Please use the "addQueryParameter" method instead.'
-          )
+          ),
+        'Exception message should contain "Path should not contain query parameters. Please use the "addQueryParameter" method instead."'
       );
     }
   }

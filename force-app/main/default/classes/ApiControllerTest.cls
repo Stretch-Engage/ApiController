@@ -45,22 +45,6 @@ private class ApiControllerTest {
   }
 
   @isTest
-  static void testAddQueryParameter() {
-    ApiController ctrl = new ApiController()
-      .init('My_Named_Credential', ApiController.HttpVerb.GET, '/some/path');
-    Map<String, String> queryParameters = new Map<String, String>{
-      'param1' => 'valueStored'
-    };
-    ctrl.addQueryParameter(queryParameters);
-    ctrl.doCallout();
-    Assert.areEqual(
-      '/some/path?param1=valueStored',
-      ctrl.request.getEndpoint(),
-      'The query parameter did not match the provided values at the end of the path.'
-    );
-  }
-
-  @isTest
   static void testAddBody() {
     ApiController ctrl = new ApiController()
       .init('My_Named_Credential', ApiController.HttpVerb.POST, '/some/path');
@@ -74,6 +58,10 @@ private class ApiControllerTest {
       .init('My_Named_Credential', ApiController.HttpVerb.GET, '/some/path');
     Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
     Test.startTest();
+    Map<String, String> queryParameters = new Map<String, String>{
+      'param1' => 'valueStored'
+    };
+    ctrl.addQueryParameter(queryParameters);
     ctrl.doCallout();
     Test.stopTest();
     Assert.areEqual(

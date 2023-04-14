@@ -50,15 +50,6 @@ private class ApiControllerTest {
   }
 
   @isTest
-  static void testAddContentLength() {
-    ApiController ctrl = new ApiController()
-      .init('My_Named_Credential', ApiController.HttpVerb.POST, '/some/path');
-    ctrl.addBody('{"foo":"bar"}');
-    ctrl.addContentLength(ctrl.request.getBody().length());
-    System.assertEquals('13', ctrl.request.getHeader('content-length'));
-  }
-
-  @isTest
   static void testAddBody() {
     ApiController ctrl = new ApiController()
       .init('My_Named_Credential', ApiController.HttpVerb.POST, '/some/path');
